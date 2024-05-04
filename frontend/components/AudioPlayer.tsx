@@ -157,7 +157,7 @@ export default function AudioPlayer({ src, size }: AudioPlayerProps) {
                 Audio Player
               </div>
             </div>
-            <div className="ml-4">
+            <div className="ml-3 sm:ml-4">
               <CopyLink size={18} link={src} />
             </div>
           </div>
