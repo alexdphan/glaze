@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Check, Copy, Link } from 'lucide-react';
+import { Check, Copy } from 'lucide-react';
 
 interface CopyTextProps {
   size?: number;
@@ -10,14 +10,19 @@ const CopyText: React.FC<CopyTextProps> = ({ size = 18, text }) => {
   const [showCheckIcon, setShowCheckIcon] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleIconClick = () => {
-    setShowCheckIcon(true);
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+  const handleIconClick = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setShowCheckIcon(true);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        setShowCheckIcon(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to copy text:', error);
     }
-    timeoutRef.current = setTimeout(() => {
-      setShowCheckIcon(false);
-    }, 1000);
   };
 
   useEffect(() => {
