@@ -10,7 +10,7 @@ export default function Home() {
   const [showMultiStep, setShowMultiStep] = useState(false);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-12 text-black space-y-8 bg-background">
+    <main className="flex min-h-screen flex-col items-center justify-center p-12 text-black space-y-8 bg-background max-w-screen">
       <div className="absolute top-10 flex flex-row text-foreground sm:text-xl text-lg">
         Made by&nbsp;
         <a
