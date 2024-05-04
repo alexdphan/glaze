@@ -12,6 +12,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import boto3
 from botocore.exceptions import NoCredentialsError
 import uvicorn
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 load_dotenv()
 
@@ -35,6 +38,8 @@ s3 = boto3.client('s3',
 aws_bucket_name = os.environ.get("AWS_BUCKET_NAME")
 aws_bucket_region = os.environ.get("AWS_BUCKET_REGION")
 
+limiter = Limiter(key_func=get_remote_address)
+
 app = FastAPI()
 
 # origins is the list of origins that the API will allow (the frontend)
@@ -53,10 +58,20 @@ def healthcheck():
     return {"status": "ok"}
 
 
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={
+            "error": "Rate limit exceeded",
+            "detail": str(exc.detail),
+        }
+    )
+
 @app.post("/generate")
+@limiter.limit("4/minute")
 async def generate(request: Request):
     try:
-
         data = await request.json()
         user_name = data["name"]
         user_description = data["description"]
@@ -77,10 +92,8 @@ async def generate(request: Request):
             stop=["\n"],
         )
 
-
         full_response = response.choices[0].message.content
 
-        # return JSONResponse(content={"response": full_response})
         print(full_response)
         return JSONResponse(content={"response": full_response})
     except Exception as e:
@@ -88,6 +101,7 @@ async def generate(request: Request):
         return JSONResponse(content={"error": "An error occurred"}, status_code=500)
 
 @app.post("/text-to-speech")
+@limiter.limit("4/minute")
 async def text_to_speech(request: Request):
     data = await request.json()
     text = data["text"]
@@ -114,34 +128,31 @@ async def text_to_speech(request: Request):
 
     audio_stream.seek(0)
     unique_id = str(uuid.uuid4())
-    # s3_key = f"audio_{unique_id}.mp3"
     s3_key = f"{name}_{unique_id}.mp3"
     
     try:
         s3.upload_fileobj(audio_stream, aws_bucket_name, s3_key)
-        # presigned_url = s3.generate_presigned_url(
-        #     'get_object',
-        #     Params={'Bucket': aws_bucket_name, 'Key': s3_key},
-        #     ExpiresIn=259200  # URL expiration time in seconds (3 days)
-        # )
         presigned_url = s3.generate_presigned_url(
-        'get_object',
-        Params={
-            'Bucket': aws_bucket_name,
-            'Key': s3_key,
-            'ResponseContentDisposition': 'inline',
-            'ResponseContentType': 'audio/mpeg'
-        },
-        ExpiresIn=259200  # URL expiration time in seconds (3 days)
+            'get_object',
+            Params={
+                'Bucket': aws_bucket_name,
+                'Key': s3_key,
+                'ResponseContentDisposition': 'inline',
+                'ResponseContentType': 'audio/mpeg'
+            },
+            ExpiresIn=259200  # URL expiration time in seconds (3 days)
         )
         return JSONResponse(content={"audio_url": presigned_url})
     except NoCredentialsError as e:
         return JSONResponse(content={"error": "AWS credentials error"}, status_code=500)
     
     
-# separate function to stream the audio (asynchronous background task)
 async def stream_audio(audio_stream: BytesIO):
     return StreamingResponse(audio_stream, media_type="audio/mp3")
+
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 if __name__ == "__main__":

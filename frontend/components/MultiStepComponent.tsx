@@ -99,9 +99,15 @@ export default function MultiStepComponent() {
           setGlaze('Failed to fetch audio URL');
         }
       }
-    } catch (error) {
-      console.error('Error calling API:', error);
-      setGlaze('Error calling API: ' + error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 429) {
+        const errorData = await error.response.json();
+        console.error('Rate limit exceeded:', errorData.detail);
+        setGlaze('Rate limit exceeded. Please try again later.');
+      } else {
+        console.error('Error calling API:', error);
+        setGlaze('Error calling API: ' + error.message);
+      }
     }
   }
 
