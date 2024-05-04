@@ -23,7 +23,7 @@ export default function Home() {
         </a>
       </div>
       <div className="text-center">
-        <h1 className="sm:text-4xl text-2xl font-bold mb-4 tracking-tight italic bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 bg-clip-text text-transparent title">
+        <h1 className="sm:text-6xl text-4xl font-bold mb-4 tracking-tight italic bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 bg-clip-text text-transparent title">
           <span className="shine">Glaze</span>
         </h1>
         <p className="sm:text-xl text-lg text-foreground tracking-tight">
