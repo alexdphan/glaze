@@ -154,15 +154,16 @@ export default function MultiStepComponent() {
         return (
           <>
             <div className="sm:p-3 rounded-lg w-full flex justify-center items-center">
-              <div>
+              <div style={{ minWidth: '220px' }}>
+                {' '}
+                {/* Set a minimum width or a fixed width */}
                 <div className="audio-player">
                   <div className="progress-bar">
                     <div className="progress"></div>
                   </div>
-                  {/* <AudioPlayer src="audio.mp3" size={24} /> */}
                   <AudioPlayer src={audioSrc} size={24} />
                 </div>
-                {glaze && (
+                {glaze ? (
                   <div className="flex flex-row space-x-3 justify-center mt-3">
                     <button
                       className="button"
@@ -173,6 +174,18 @@ export default function MultiStepComponent() {
 
                     <div>
                       <CopyText size={18} text={glaze} />
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    className="flex flex-row space-x-3 justify-center mt-3"
+                    style={{ visibility: 'hidden' }}
+                  >
+                    <button className="button">
+                      <ExpandText size={18} />
+                    </button>
+                    <div>
+                      <CopyText size={18} text="Placeholder" />
                     </div>
                   </div>
                 )}
