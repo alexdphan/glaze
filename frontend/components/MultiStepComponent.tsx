@@ -77,7 +77,7 @@ export default function MultiStepComponent() {
       // Request to generate text based on name and description
       // const response = await fetch('http://127.0.0.1:8080/generate', {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_FRONTEND_URL + '/generate',
+        process.env.NEXT_PUBLIC_BACKEND_URL + '/generate',
         {
           method: 'POST',
           headers: {
@@ -94,7 +94,7 @@ export default function MultiStepComponent() {
       // If there's a response, request the audio URL
       if (data.response) {
         const audioResponse = await fetch(
-          process.env.NEXT_PUBLIC_FRONTEND_URL + '/text-to-speech',
+          process.env.NEXT_PUBLIC_BACKEND_URL + '/text-to-speech',
           {
             method: 'POST',
             headers: {
