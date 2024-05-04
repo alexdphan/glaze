@@ -4,6 +4,7 @@ import Form from '../components/Form';
 import './globals.css';
 import MultiStepComponent from '../components/MultiStepComponent';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [showMultiStep, setShowMultiStep] = useState(false);
@@ -24,7 +25,9 @@ export default function Home() {
       </div>
       <div className="text-center">
         <h1 className="sm:text-6xl text-4xl font-bold mb-4 tracking-tight italic bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 bg-clip-text text-transparent title">
-          <span className="shine">Glaze</span>
+          <Link href="https://www.glazedai.com/">
+            <span className="shine">Glaze</span>
+          </Link>
         </h1>
         <p className="sm:text-xl text-lg text-foreground tracking-tight">
           The place to congratulate your friends, in a weird way...
