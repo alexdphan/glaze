@@ -95,8 +95,8 @@ export default function MultiStepComponent() {
           setAudioSrc(audioData.audio_url);
           console.log('Audio URL:', audioData.audio_url);
         } else {
-          console.error('Failed to fetch audio URL');
-          setGlaze('Failed to fetch audio URL');
+          console.error('Failed to fetch audio URL', audioResponse);
+          setGlaze('Failed to fetch audio URL' + audioResponse);
         }
       }
     } catch (error: any) {
