@@ -38,7 +38,7 @@ aws_bucket_region = os.environ.get("AWS_BUCKET_REGION")
 app = FastAPI()
 
 # origins is the list of origins that the API will allow (the frontend)
-origins = ["http://localhost:3000"]
+origins = ["http://localhost:3000", "https://glaze-two.vercel.app", "https://www.glazedai.com"]
 
 app.add_middleware(
     CORSMiddleware,

@@ -106,7 +106,7 @@ export default function MultiStepComponent() {
 
         if (audioResponse.ok) {
           const audioData = await audioResponse.json();
-          setAudioSrc(audioData.audio_url); // Use the presigned URL from the backend instead of creating a blob
+          setAudioSrc(audioData.audio_url);
           console.log('Audio URL:', audioData.audio_url);
         } else {
           console.error('Failed to fetch audio URL');
