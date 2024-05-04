@@ -836,5 +836,5 @@ button:disabled {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.2; /* Adjusted line-height */
-  padding: 0 2px; /* Added padding, Ensure that the text has enough space around it. */
+  padding: 0 10px; /* Added padding, Ensure that the text has enough space around it. */
 }

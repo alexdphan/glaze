@@ -78,11 +78,13 @@ export default function AudioPlayer({ src, size }: AudioPlayerProps) {
   return (
     <div>
       <div className="flex flex-row sm:space-x-6 space-x-3 items-center justify-center w-full">
-        <div className=" flex">
+        <div className="w-full flex">
           {!src ? (
             <div className="flex flex-col items-center justify-center space-y-3">
               <Spinner color="hsl(27, 100%, 55%)" size={40} />
-              <p className="text-foreground ">Generating Glaze Audio...</p>
+              <p className="text-foreground w-full text-center">
+                Generating Glaze Audio...
+              </p>
             </div>
           ) : (
             <div className="loader h-10 w-10 sm:h-full sm:w-full">

@@ -33,7 +33,9 @@ export default function Home() {
           The place to congratulate your friends, in a weird way...
         </p>
       </div>
-      <MultiStepComponent />
+      <div className="flex flex-col items-center justify-center w-full">
+        <MultiStepComponent />
+      </div>
     </main>
   );
 }
