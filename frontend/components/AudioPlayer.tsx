@@ -148,13 +148,13 @@ export default function AudioPlayer({ src, size }: AudioPlayerProps) {
         </div>
 
         {src && (
-          <div className="flex flex-row">
-            <div className="flex flex-col text-left">
+          <div className="flex flex-row items-center justify-start">
+            <div className="flex flex-col text-left mr-2">
               <h2 className="sm:text-foreground sm:text-base text-sm text-white text-left">
                 Generated Glaze
               </h2>
               <div className="text-muted-heading sm:text-base text-sm text-thin">
-                Audio Player Name
+                Audio Player
               </div>
             </div>
             <div>

@@ -36,7 +36,7 @@ const CopyLink: React.FC<CopyLinkProps> = ({ size = 18, link }) => {
   return (
     <button
       onClick={handleIconClick}
-      className="plasmo-link-item-icon-copy rounded-xs pt-0.5"
+      className="plasmo-link-item-icon-copy rounded-xs "
     >
       {showCheckIcon ? (
         <Check size={size} style={{ animation: 'fadeIn 250ms ease-out' }} />
