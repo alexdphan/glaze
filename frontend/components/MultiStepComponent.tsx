@@ -7,25 +7,11 @@ import '../app/globals.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Spinner } from './Spinner';
 import AudioPlayer from './AudioPlayer';
-import {
-  Check,
-  Copy,
-  Rewind,
-  Play,
-  FastForward,
-  FileAudio2,
-} from 'lucide-react';
-import { useEffect, useRef } from 'react';
-import CopyLink from './CopyLink';
 import ExpandText from './ExpandText';
 import CopyText from './CopyText';
 
 const variants = {
-  // initial: { x: '110%', opacity: 0 },
-  // animate: { x: 0, opacity: 1 },
-  // exit: { x: '-110%', opacity: 0 },
   initial: (direction: number) => ({
     x: `${110 * direction}%`,
     opacity: 0,
@@ -100,7 +86,7 @@ export default function MultiStepComponent() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ text: data.response }),
+            body: JSON.stringify({ name: name, text: data.response }),
           }
         );
 

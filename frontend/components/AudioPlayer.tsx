@@ -3,8 +3,6 @@ import { useState, useRef, useEffect } from 'react';
 import { Pause, Play, Rewind, FastForward, FileAudio2 } from 'lucide-react';
 import { Spinner } from './Spinner';
 import CopyLink from './CopyLink';
-import ExpandText from './ExpandText';
-import CopyText from './CopyText';
 
 interface AudioPlayerProps {
   src: string;
@@ -99,7 +97,6 @@ export default function AudioPlayer({ src, size }: AudioPlayerProps) {
                     : 'grid h-full grid-cols-11 justify-center gap-[2px] bg-transparent'
                 }`}
               >
-                {/* <title>Audio Wave</title> */}
                 <path
                   id="Line_1"
                   data-name="Line 1"
@@ -222,17 +219,6 @@ export default function AudioPlayer({ src, size }: AudioPlayerProps) {
               <div className="text-foreground ml-4">{formatTime(duration)}</div>
             </div>
           </div>
-          {/* <div className="flex items-center mb-6 justify-center">
-            <div className="flex items-center space-x-3">
-              <button
-                className="button"
-                onClick={() => setIsExpanded(!isExpanded)}
-              >
-                <ExpandText size={18} />
-              </button>
-              <CopyText size={18} />
-            </div>
-          </div> */}
         </>
       )}
     </div>

@@ -91,6 +91,7 @@ async def generate(request: Request):
 async def text_to_speech(request: Request):
     data = await request.json()
     text = data["text"]
+    name = data["name"]
 
     response = el_client.text_to_speech.convert(
         voice_id="NYLllF7eMB4BVAl2miKe",
@@ -113,7 +114,8 @@ async def text_to_speech(request: Request):
 
     audio_stream.seek(0)
     unique_id = str(uuid.uuid4())
-    s3_key = f"audio_{unique_id}.mp3"
+    # s3_key = f"audio_{unique_id}.mp3"
+    s3_key = f"{name}_{unique_id}.mp3"
     
     try:
         s3.upload_fileobj(audio_stream, aws_bucket_name, s3_key)
