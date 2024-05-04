@@ -3,9 +3,10 @@ import { Check, Copy, Link } from 'lucide-react';
 
 interface CopyTextProps {
   size?: number;
+  text: string;
 }
 
-const CopyText: React.FC<CopyTextProps> = ({ size = 18 }) => {
+const CopyText: React.FC<CopyTextProps> = ({ size = 18, text }) => {
   const [showCheckIcon, setShowCheckIcon] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 

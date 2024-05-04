@@ -17,13 +17,7 @@ export default function AudioPlayer({ src, size }: AudioPlayerProps) {
   const [duration, setDuration] = useState(0);
   const [isExpanded, setIsExpanded] = useState(true);
 
-  // useEffect(() => {
-  //   if (src) {
-  //     setGlaze(src);
-  //     console.log('Setting glaze:', src);
-  //   }
-  // }, [src, setGlaze]);
-
+  // This ref is attached to the audio element to control playback and access playback properties like current time and duration.
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const handlePlayPause = () => {
@@ -167,7 +161,7 @@ export default function AudioPlayer({ src, size }: AudioPlayerProps) {
               </div>
             </div>
             <div>
-              <CopyLink size={18} />
+              <CopyLink size={18} link={src} />
             </div>
           </div>
         )}

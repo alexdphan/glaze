@@ -1,22 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
-import { Check, Copy, Link, Link2 } from 'lucide-react';
+import { Check, Link2 } from 'lucide-react';
 
 interface CopyLinkProps {
   size?: number;
+  link: string; // Link to be copied
 }
 
-const CopyLink: React.FC<CopyLinkProps> = ({ size = 18 }) => {
+const CopyLink: React.FC<CopyLinkProps> = ({ size = 18, link }) => {
   const [showCheckIcon, setShowCheckIcon] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleIconClick = () => {
-    setShowCheckIcon(true);
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+  const handleIconClick = async () => {
+    try {
+      await navigator.clipboard.writeText(link);
+      setShowCheckIcon(true);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        setShowCheckIcon(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to copy link:', error);
     }
-    timeoutRef.current = setTimeout(() => {
-      setShowCheckIcon(false);
-    }, 1000);
   };
 
   useEffect(() => {
@@ -31,7 +37,6 @@ const CopyLink: React.FC<CopyLinkProps> = ({ size = 18 }) => {
     <button
       onClick={handleIconClick}
       className="plasmo-link-item-icon-copy rounded-xs pt-0.5"
-      // style={{ transform: 'rotate(-45deg)' }}
     >
       {showCheckIcon ? (
         <Check size={size} style={{ animation: 'fadeIn 250ms ease-out' }} />

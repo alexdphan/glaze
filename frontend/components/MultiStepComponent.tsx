@@ -22,6 +22,21 @@ import CopyLink from './CopyLink';
 import ExpandText from './ExpandText';
 import CopyText from './CopyText';
 
+const variants = {
+  // initial: { x: '110%', opacity: 0 },
+  // animate: { x: 0, opacity: 1 },
+  // exit: { x: '-110%', opacity: 0 },
+  initial: (direction: number) => ({
+    x: `${110 * direction}%`,
+    opacity: 0,
+  }),
+  active: { x: 0, opacity: 1 },
+  exit: (direction: number) => ({
+    x: `${-110 * direction}%`,
+    opacity: 0,
+  }),
+};
+
 export default function MultiStepComponent() {
   const [currentStep, setCurrentStep] = useState(0);
   const [ref, bounds] = useMeasure();
@@ -30,6 +45,7 @@ export default function MultiStepComponent() {
   const [audioSrc, setAudioSrc] = useState('');
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [direction, setDirection] = useState(1); // Set initial value to 1 or -1 as appropriate
 
   const nameSchema = z
     .string()
@@ -58,7 +74,8 @@ export default function MultiStepComponent() {
 
   async function generateGlazing(name: string, description: string) {
     try {
-      const response = await fetch('http://127.0.0.1:8000/generate', {
+      // Request to generate text based on name and description
+      const response = await fetch('http://127.0.0.1:8080/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,19 +87,27 @@ export default function MultiStepComponent() {
       console.log(data);
       setGlaze(data.response);
 
+      // If there's a response, request the audio URL
       if (data.response) {
-        const audio = await fetch('http://127.0.0.1:8000/text-to-speech', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ text: data.response }),
-        });
+        const audioResponse = await fetch(
+          'http://127.0.0.1:8080/text-to-speech',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: data.response }),
+          }
+        );
 
-        const audioBlob = await audio.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        setAudioSrc(audioUrl);
-        console.log('Audio URL:', audioUrl);
+        if (audioResponse.ok) {
+          const audioData = await audioResponse.json();
+          setAudioSrc(audioData.audio_url); // Use the presigned URL from the backend instead of creating a blob
+          console.log('Audio URL:', audioData.audio_url);
+        } else {
+          console.error('Failed to fetch audio URL');
+          setGlaze('Failed to fetch audio URL');
+        }
       }
     } catch (error) {
       console.error('Error calling API:', error);
@@ -157,7 +182,7 @@ export default function MultiStepComponent() {
                     </button>
 
                     <div>
-                      <CopyText size={18} />
+                      <CopyText size={18} text={glaze} />
                     </div>
                   </div>
                 )}
@@ -246,13 +271,20 @@ export default function MultiStepComponent() {
             </button>
           </div>
           <div className="multi-step-inner sm:p-6 p-6">
-            <AnimatePresence mode="popLayout" initial={false}>
+            <AnimatePresence
+              mode="popLayout"
+              initial={false}
+              custom={{ direction }}
+            >
               <motion.div
                 key={currentStep}
-                initial={{ x: '110%', opacity: 0 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ x: '-110%', opacity: 0 }}
+                variants={variants}
+                initial="initial"
+                animate="active"
+                exit="exit"
+                custom={direction}
               >
+                {/* {direction} */}
                 {content}
               </motion.div>
             </AnimatePresence>
@@ -264,11 +296,13 @@ export default function MultiStepComponent() {
                   if (currentStep === 0) {
                     return;
                   }
+                  setDirection(-1);
                   setCurrentStep((prev) => prev - 1);
                 }}
               >
                 Back
               </button>
+              {/* {direction} */}
               {currentStep !== 2 && (
                 <button
                   className="primary-button"
@@ -289,11 +323,13 @@ export default function MultiStepComponent() {
                     if (currentStep === 1) {
                       const formData = getValues();
                       generateGlazing(formData.name, formData.description);
+                      setDirection(1);
                       setCurrentStep(2); // Move to the final step to show the result
                       return;
                     }
 
                     // Otherwise, just move to the next step
+                    setDirection(1);
                     setCurrentStep((prev) => prev + 1);
                   }}
                 >

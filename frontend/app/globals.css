@@ -835,4 +835,6 @@ button:disabled {
   animation: text-shine 4s infinite linear;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  line-height: 1.2; /* Adjusted line-height */
+  padding: 0 2px; /* Added padding, Ensure that the text has enough space around it. */
 }
