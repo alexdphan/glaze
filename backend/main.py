@@ -40,9 +40,17 @@ app = FastAPI()
 # origins is the list of origins that the API will allow (the frontend)
 origins = ["http://localhost:3000", "https://glaze-two.vercel.app", "https://www.glazedai.com", "https://glazedai.com"]
 
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # Allow all domains temporarily
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
