@@ -207,7 +207,7 @@ export default function MultiStepComponent() {
                       {glaze &&
                       (glaze.startsWith('Rate limit exceeded') ||
                         glaze.startsWith('Error calling API')) ? (
-                        <p className="text-foreground mt-6">{glaze}</p>
+                        <p className="text-foreground mt-6">{glaze}</p> 
                       ) : (
                         <p className="text-foreground mt-6">{glaze}</p>
                       )}
