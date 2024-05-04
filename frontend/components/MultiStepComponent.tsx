@@ -204,7 +204,12 @@ export default function MultiStepComponent() {
                       transition={{ duration: 0.3 }}
                       className="text-response"
                     >
-                      <p className="text-foreground mt-6">{glaze}</p>
+                      {glaze.startsWith('Rate limit exceeded') ||
+                      glaze.startsWith('Error calling API') ? (
+                        <p className="text-foreground mt-6">{glaze}</p>
+                      ) : (
+                        <p className="text-foreground mt-6">{glaze}</p>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
