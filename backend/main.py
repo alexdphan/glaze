@@ -11,6 +11,7 @@ from groq import Groq
 from fastapi.middleware.cors import CORSMiddleware
 import boto3
 from botocore.exceptions import NoCredentialsError
+import uvicorn
 
 load_dotenv()
 
@@ -135,8 +136,11 @@ async def text_to_speech(request: Request):
     except NoCredentialsError as e:
         return JSONResponse(content={"error": "AWS credentials error"}, status_code=500)
     
+    
 # separate function to stream the audio (asynchronous background task)
 async def stream_audio(audio_stream: BytesIO):
     return StreamingResponse(audio_stream, media_type="audio/mp3")
 
 
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8080)
