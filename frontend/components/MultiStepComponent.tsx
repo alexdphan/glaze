@@ -75,13 +75,17 @@ export default function MultiStepComponent() {
   async function generateGlazing(name: string, description: string) {
     try {
       // Request to generate text based on name and description
-      const response = await fetch('http://127.0.0.1:8080/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: name, description: description }),
-      });
+      // const response = await fetch('http://127.0.0.1:8080/generate', {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_FRONTEND_URL + '/generate',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: name, description: description }),
+        }
+      );
 
       const data = await response.json();
       console.log(data);
@@ -90,7 +94,7 @@ export default function MultiStepComponent() {
       // If there's a response, request the audio URL
       if (data.response) {
         const audioResponse = await fetch(
-          'http://127.0.0.1:8080/text-to-speech',
+          process.env.NEXT_PUBLIC_FRONTEND_URL + '/text-to-speech',
           {
             method: 'POST',
             headers: {
