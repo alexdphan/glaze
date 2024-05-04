@@ -149,7 +149,7 @@ export default function AudioPlayer({ src, size }: AudioPlayerProps) {
 
         {src && (
           <div className="flex flex-row items-center justify-start">
-            <div className="flex flex-col text-left mr-2">
+            <div className="flex flex-col text-left ">
               <h2 className="sm:text-foreground sm:text-base text-sm text-white text-left">
                 Generated Glaze
               </h2>
@@ -157,7 +157,7 @@ export default function AudioPlayer({ src, size }: AudioPlayerProps) {
                 Audio Player
               </div>
             </div>
-            <div>
+            <div className="ml-4">
               <CopyLink size={18} link={src} />
             </div>
           </div>
